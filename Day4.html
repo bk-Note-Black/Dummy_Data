@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie API (Frontend Only)</title>
+</head>
+<body>
+    <h2>Add Movie</h2>
+    <input type="text" id="title" placeholder="Movie Title">
+    <input type="text" id="director" placeholder="Director">
+    <input type="number" id="year" placeholder="Year">
+    <button onclick="addMovie()">Add Movie</button>
+
+    <h2>Get Movie</h2>
+    <input type="text" id="searchTitle" placeholder="Search Movie by Title">
+    <button onclick="getMovie()">Get Movie</button>
+
+    <div id="output"></div>
+
+    <script>
+        function addMovie() {
+            let title = document.getElementById('title').value;
+            let director = document.getElementById('director').value;
+            let year = document.getElementById('year').value;
+
+            if (!title || !director || !year) {
+                alert("All fields are required!");
+                return;
+            }
+
+            let movies = JSON.parse(localStorage.getItem("movies")) || [];
+
+            // Check if movie already exists
+            if (movies.some(movie => movie.title.toLowerCase() === title.toLowerCase())) {
+                alert("Movie already exists!");
+                return;
+            }
+
+            movies.push({ title, director, year });
+            localStorage.setItem("movies", JSON.stringify(movies));
+
+            alert("Movie added successfully!");
+        }
+
+        function getMovie() {
+            let searchTitle = document.getElementById('searchTitle').value.toLowerCase();
+            let movies = JSON.parse(localStorage.getItem("movies")) || [];
+
+            let movie = movies.find(m => m.title.toLowerCase() === searchTitle);
+
+            if (movie) {
+                document.getElementById('output').innerHTML = `<p><strong>Title:</strong> ${movie.title} <br>
+                    <strong>Director:</strong> ${movie.director} <br>
+                    <strong>Year:</strong> ${movie.year}</p>`;
+            } else {
+                document.getElementById('output').innerHTML = `<p>Movie not found!</p>`;
+            }
+        }
+    </script>
+
+</body>
+</html>

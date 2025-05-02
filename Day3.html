@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+</body>
+<script>
+    async function getCategory() {
+        try {
+            const response = await fetch("http://10.52.0.174:3000/quote/category");
+            const data = await response.json();
+            console.log(data);
+        } catch (error) {
+            console.error("Error fetching data", error);
+        }
+    }
+    getCategory();
+    async function getRandom() {
+        try {
+            const response = await fetch("http://10.52.0.174:3000/quote/rand");
+            const data = await response.json();
+            console.log(data);
+        } catch (error) {
+            console.error("Error fetching data", error);
+        }
+    }
+    getRandom();
+
+    async function resultData() {
+        try {
+            const [categoryData, randData] = await Promise.all([getCategory(), getRandom()]);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+</script>
+
+
+
+</body>
+
+</html>

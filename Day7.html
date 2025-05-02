@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="quoteContainer"></div>
+    <div id="favoriteContainer"></div>
+</body>
+<script>
+    const quotes = [
+        {
+            quote: "The only limit to our realization of tomorrow is our doubts of today.",
+            author: "Franklin D. Roosevelt",
+            genre: "Motivational"
+        },
+        {
+            quote: "In the middle of every difficulty lies opportunity.",
+            author: "Albert Einstein",
+            genre: "Inspirational"
+        },
+        {
+            quote: "Do what you can, with what you have, where you are.",
+            author: "Theodore Roosevelt",
+            genre: "Motivational"
+        },
+        {
+            quote: "It is not length of life, but depth of life.",
+            author: "Ralph Waldo Emerson",
+            genre: "Philosophical"
+        },
+        {
+            quote: "Happiness depends upon ourselves.",
+            author: "Aristotle",
+            genre: "Philosophical"
+        },
+        {
+            quote: "Not all those who wander are lost.",
+            author: "J.R.R. Tolkien",
+            genre: "Literary"
+        },
+        {
+            quote: "The purpose of our lives is to be happy.",
+            author: "Dalai Lama",
+            genre: "Spiritual"
+        },
+        {
+            quote: "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+            author: "Winston Churchill",
+            genre: "Inspirational"
+        },
+        {
+            quote: "Life is really simple, but we insist on making it complicated.",
+            author: "Confucius",
+            genre: "Philosophical"
+        },
+        {
+            quote: "All that we see or seem is but a dream within a dream.",
+            author: "Edgar Allan Poe",
+            genre: "Literary"
+        }
+    ];
+
+    let count = 0;
+    let likedQuotes = new Map();
+
+    const quoteContainer = document.getElementById("quoteContainer");
+    const quoteDisplay = document.createElement("p");
+    quoteDisplay.textContent = `${quotes[count].quote} - ${quotes[count].author} (${quotes[count].genre})`;
+    quoteContainer.appendChild(quoteDisplay);
+
+    const favoriteContainer = document.getElementById("favoriteContainer")
+
+    function updateFavorites() {
+        favoriteContainer.innerHTML = "<h3>Favorites</h3>";
+        likedQuotes.forEach((quote, index) => {
+            const favoriteQuote = document.createElement("p");
+            favoriteQuote.textContent = `${quote.quote} - ${quote.author} (${quote.genre})`;
+
+            const unlikeButton = document.createElement("button");
+            unlikeButton.innerHTML = '♥';
+            unlikeButton.addEventListener("click", () => {
+                likedQuotes.delete(index);
+                updateFavorites();
+
+                if (count === index) {
+                    likeButton.style.backgroundColor = "white";
+                    likeButton.style.color = "black";
+                }
+            });
+
+            favoriteQuote.appendChild(unlikeButton);
+            favoriteContainer.appendChild(favoriteQuote);
+        });
+    }
+
+    const likeButton = document.createElement("button");
+    likeButton.textContent = '♥';
+
+    likeButton.style.backgroundColor = "white";
+    likeButton.style.color = "black";
+    likeButton.addEventListener("click", () => {
+        if (likedQuotes.has(count)) {
+            likedQuotes.delete(count);
+            likeButton.style.backgroundColor = "white";  //unlike
+            likeButton.style.color = "black";
+        } else {
+            likedQuotes.set(count, quotes[count]);
+            likeButton.style.backgroundColor = "black"; //like
+            likeButton.style.color = "white";
+        }
+        updateFavorites();
+    });
+
+    quoteContainer.appendChild(likeButton);
+
+    const nextButton = document.createElement("button");
+    nextButton.textContent = "Next";
+    nextButton.addEventListener("click", () => {
+        count = (count + 1) % quotes.length;
+        quoteDisplay.textContent = `${quotes[count].quote} - ${quotes[count].author} (${quotes[count].genre})`;
+
+        likeButton.style.backgroundColor = likedQuotes.has(count) ? "black" : "white";
+        likeButton.style.color = likedQuotes.has(count) ? "white" : "black";
+    });
+
+    quoteContainer.appendChild(nextButton);
+
+</script>
+
+</html>

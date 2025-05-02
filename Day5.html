@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotes & Favorites</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .quotes-container, .favorites-container {
+            width: 45%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        h2 {
+            text-align: center;
+        }
+        .quote-box {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .actions {
+            margin-top: 5px;
+        }
+        button {
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-right: 5px;
+        }
+        #favorites-container {
+            display: block;
+        }
+        #empty-message {
+            text-align: center;
+            font-style: italic;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Quotes Collection</h1>
+
+    <div class="container">
+        <div id="quotes-container" class="quotes-container">
+            <h2>Quotes</h2>
+        </div>
+
+        <div id="favorites-container" class="favorites-container">
+            <h2>Favorites</h2>
+            <p id="empty-message">No favorites yet.</p>
+            <div id="favorites"></div>
+        </div>
+    </div>
+
+    <script>
+        let quotes = [
+            { quote: "The only limit to our realization of tomorrow is our doubts of today.", author: "Franklin D. Roosevelt", genre: "Motivational" },
+            { quote: "In the middle of every difficulty lies opportunity.", author: "Albert Einstein", genre: "Inspirational" },
+            { quote: "Do what you can, with what you have, where you are.", author: "Theodore Roosevelt", genre: "Motivational" },
+            { quote: "It is not length of life, but depth of life.", author: "Ralph Waldo Emerson", genre: "Philosophical" },
+            { quote: "Happiness depends upon ourselves.", author: "Aristotle", genre: "Philosophical" },
+            { quote: "Not all those who wander are lost.", author: "J.R.R. Tolkien", genre: "Literary" },
+            { quote: "The purpose of our lives is to be happy.", author: "Dalai Lama", genre: "Spiritual" },
+            { quote: "Success is not final, failure is not fatal: It is the courage to continue that counts.", author: "Winston Churchill", genre: "Inspirational" },
+            { quote: "Life is really simple, but we insist on making it complicated.", author: "Confucius", genre: "Philosophical" },
+            { quote: "All that we see or seem is but a dream within a dream.", author: "Edgar Allan Poe", genre: "Literary" }
+        ];
+
+        let likedQuotes = new Set();
+
+        function renderQuotes() {
+            const quotesContainer = document.getElementById("quotes-container");
+            quotes.forEach((item, index) => {
+                let quoteBox = document.createElement("div");
+                quoteBox.classList.add("quote-box");
+                quoteBox.innerHTML = `
+                    <p><strong>"${item.quote}"</strong> - ${item.author} <em>(${item.genre})</em></p>
+                    <div class="actions">
+                        <button id="like-btn-${index}" onclick="toggleLike(${index}, false)">Like</button>
+                    </div>
+                `;
+                quotesContainer.appendChild(quoteBox);
+            });
+        }
+
+        function toggleLike(index, fromFavorites) {
+            const favoritesContainer = document.getElementById("favorites-container");
+            const favorites = document.getElementById("favorites");
+            const likeBtn = document.getElementById(`like-btn-${index}`);
+            const emptyMessage = document.getElementById("empty-message");
+            let quoteText = quotes[index].quote;
+            let author = quotes[index].author;
+            let quoteKey = `${quoteText} - ${author}`;
+
+            if (likedQuotes.has(quoteKey)) {
+                likedQuotes.delete(quoteKey);
+                likeBtn.innerText = "Like";
+
+                document.getElementById(`fav-${index}`)?.remove();
+
+                if (likedQuotes.size === 0) {
+                    emptyMessage.style.display = "block";
+                }
+            } else {
+                likedQuotes.add(quoteKey);
+                likeBtn.innerText = "Unlike";
+
+                emptyMessage.style.display = "none";
+
+                let favBox = document.createElement("div");
+                favBox.classList.add("quote-box");
+                favBox.id = `fav-${index}`;
+                favBox.innerHTML = `
+                    <p><strong>"${quoteText}"</strong> - ${author}</p>
+                    <div class="actions">
+                        <button onclick="toggleLike(${index}, true)">Unlike</button>
+                    </div>
+                `;
+                favorites.appendChild(favBox);
+            }
+        }
+
+        renderQuotes();
+    </script>
+
+</body>
+</html>

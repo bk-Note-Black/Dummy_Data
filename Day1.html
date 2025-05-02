@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    class product {
+        constructor(name, brand, price, processor, graphicsCard) {
+            this.name = name;
+            this.brand = brand;
+            this.price = price;
+            this.processor = processor;
+            this.graphicsCard = graphicsCard;
+        }
+        displayDetails() {
+            console.log(`product : ${this.name}`);
+            console.log(`Brand : ${this.brand}`);
+            console.log(`price :${this.price}`);
+            console.log(`processor:${this.processor}`);
+            console.log(`graphicsCards: ${this.graphicsCard}`);
+        }
+        setStock(quantity) {
+            this.stock = quantity;
+        }
+        getStock() {
+            return this.stock;
+        }
+    }
+
+    class Phone extends product {
+        constructor(name, brand, price, processor, graphicsCard, type) {
+            super(name, brand, price, processor, graphicsCard,'Phone');
+            this.type = type;
+        }
+        displayDetails() {
+            super.displayDetails();
+            console.log(`Type:${this.type}`);
+        }
+    }
+    class smartPhones extends Phone {
+        constructor(name, brand, price, processor, graphicsCard, camera, battery) {
+            super(name, brand, price, processor, graphicsCard, 'smartPhones');
+            this.camera = camera;
+            this.battery = battery;
+        }
+        displayDetails() {
+            super.displayDetails();
+            console.log(`Camera:${this.camera}MP`);
+            console.log(`Battery:${this.battery}mAh`);
+        }
+    }
+
+    class ButtonPhone extends Phone {
+        constructor(name, brand, price, processor, graphicsCard, battery) {
+            super(name, brand, price, processor, graphicsCard, 'ButtonPhone');
+            this.battery = battery;
+        }
+        displayDetails() {
+            super.displayDetails();
+            console.log(`Battery:${this.battery}mAh`);
+        }
+    }
+
+    class Pc extends product {
+        constructor(name, brand, price, processor, graphicsCard, type) {
+            super(name,brand,price,processor,graphicsCard,'Pc')
+            this.type = type;
+        }
+        displayDetails() {
+            super.displayDetails();
+            console.log(`Type:${this.type}`);
+        }
+    }
+
+    class DesktopPC extends Pc {
+        constructor(name, brand, price, processor, graphicsCard, ram, storage) {
+            super(name, brand, price, processor, graphicsCard, 'Desktop PC');
+            this.ram = ram;
+            this.storage = storage;
+        }
+        displayDetails() {
+            super.displayDetails();
+            console.log(`ram: ${this.ram}GB`);
+            console.log(`storage:${storage}GB`);
+        }
+    }
+    class Laptop extends Pc {
+        constructor(name, brand, price, processor, graphicsCard, ram, storage, battery) {
+            super(name, brand, price, processor.graphicsCard, 'Laptop');
+            this.ram = ram;
+            this.storage = storage;
+            this.battery = battery;
+        }
+        displayDetails() {
+            super.displayDetails();
+            console.log(`ram:${this.ram}GB`);
+            console.log(`storage:${this.storage}GB`);
+            console.log(`battery:${this.battery}mAh`);
+        }
+    }
+    const iphone = new smartPhones("iPhone 15", "Apple", 999, "A16 Bionic", "Apple GPU", 48, 4500);
+
+    iphone.setStock(10);
+    console.log("===Tech shop products ===");
+    iphone.displayDetails();
+    console.log(`Stock: ${iphone.getStock()} units`);
+    console.log('');
+
+</script>
+
+</html>

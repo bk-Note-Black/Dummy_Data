@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IntersectionObserverr</title>
+    <style>
+        p {
+            font-size: 2.2rem;
+            border: 1px solid red;
+        }
+
+        .quote {
+            height: 100vh;
+        }
+
+        #observing {
+            height: 20px;
+            border: 2px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Scrolling Down </h1>
+
+
+    <div class="container"></div>
+
+        <div id="observing"></div>
+
+</body>
+<script>
+    const quoteList = document.querySelector(".container");
+    // const authorWriter = document.getElementById("author");
+    // const quotecontainer = document.getElementById("quote-container");
+    const observingTag = document.getElementById("observing");
+    let fetchData = false;
+    function createQuote(data) {
+        console.log("created");
+        let currentElement = document.createElement('p');
+        currentElement.classList.add('quote');
+        currentElement.innerText = data.quote || "Not quote Resived in this?";
+        quoteList.appendChild(currentElement);
+    }
+
+    function quotess() {
+
+        fetch('http://10.52.0.78:3000/getQuote')
+
+            .then(responce => {
+                if (!responce.ok) {
+                    return responce.json();
+                    throw new Error("quote it not fetch");
+                }
+                return responce.json();
+            })
+            .then(data => {
+                createQuote(data);
+                fetchData = false;
+                // console.log(data);
+            }).catch(error => {
+                createQuote(error);
+
+            })
+
+
+
+        // console.log(fetch);
+    }
+
+
+
+    // let IntersectionObserver 
+    const observer = new IntersectionObserver((entries) => {
+        // entries.forEach(entry => {
+        if (!fetchData) {
+            fetchData = true;
+            quotess()
+        }
+        // });
+    }, { threshold: 0.5 });
+    observer.observe(observingTag);
+
+
+
+</script>
+
+</html>

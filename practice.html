@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TestOut</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    nav {
+      background-color: antiquewhite;
+      padding: 16px;
+    }
+
+    .btn-menu {
+      display: none;
+      border: none;
+      cursor: pointer;
+      font-size: 30px;
+      background: none;
+    }
+
+    nav ul {
+      list-style-type: none;
+      display: flex;
+    }
+
+    nav ul li {
+      margin-right: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: black;
+      font-size: 18px;
+    }
+
+    /* Responsive styles */
+    @media screen and (max-width: 600px) {
+      .btn-menu {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      nav ul {
+        display: none;
+        flex-direction: column;
+        margin-top: 10px;
+      }
+
+      nav ul.changed {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <button class="btn-menu" onclick="toggleMenu()">☰</button>
+      <ul id="ul-list">
+        <li><a href="#Home">Home</a></li>
+        <li><a href="#About">About</a></li>
+        <li><a href="#Contact">Contact</a></li>
+        <li><a href="#Footer">Footer</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("ul-list");
+      menu.classList.toggle("changed");
+    }
+  </script>
+
+</body>
+</html>

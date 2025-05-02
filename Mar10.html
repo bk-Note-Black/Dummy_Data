@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XOX Game to play</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            text-align: center;
+            background-color: black;
+        }
+
+        .Box {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 5px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            font-size: 2em;
+            text-align: center;
+            line-height: 100px;
+            border: 1px solid #f7f3f3;
+            cursor: pointer;
+            background-color: white;
+        }
+
+        #result {
+            margin-top: 25px;
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 25px;
+        }
+
+        .holl-div {
+            display: flex;
+            margin: auto;
+            /* gap: 20px; */
+            /* border: 1px solid red; */
+            width: 202px;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            margin-top: 40px;
+            color: white;
+        }
+
+        .x-score,
+        .y-score {
+            display: flex;
+            flex-direction: column;
+            /* gap: 20px */
+            width: 100px;
+        }
+
+        .x-border {
+            border: 4px solid #f7f3f3;
+            border-top: none;
+            border-left: none;
+        }
+
+        .y-border {
+            border: 4px solid #f7f3f3;
+            border-top: none;
+            border-right: none;
+
+        }
+
+        .score-x-border {
+            border: 4px solid #f7f3f3;
+            border-left: none;
+            border-bottom: none;
+            color: white;
+            padding-top: 14px;
+            font-size: 26px;
+        }
+
+        .score-y-border {
+            border: 4px solid #f7f3f3;
+            border-right: none;
+            border-bottom: none;
+            color: white;
+            padding-top: 14px;
+            font-size: 26px;
+        }
+
+        .pTag {
+            font-size: 24px;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        #resetBTN {
+            padding: 19px;
+            border-radius: 12px;
+            background-color: black;
+            color: white;
+            margin-top: 20px;
+            box-shadow: 1px 0px 0px 12px gray;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>XOX Game</h1>
+
+    <div class="holl-div">
+        <div class="x-score">
+            <div class="x-border">
+                <p class="pTag"> X </p>
+            </div>
+            <div class="score-x-border">
+                <span id="Player-x_score">0</span>
+            </div>
+        </div>
+        <div class="y-score">
+            <div class="y-border">
+                <p class="pTag"> O </p>
+            </div>
+            <div class="score-y-border">
+                <span id="Player-o_score">0</span>
+            </div>
+        </div>
+
+    </div>
+    <div id="box-container" class="Box">
+        <div class="cell" data-index="0"></div>
+        <div class="cell" data-index="1"></div>
+        <div class="cell" data-index="2"></div>
+        <div class="cell" data-index="3"></div>
+        <div class="cell" data-index="4"></div>
+        <div class="cell" data-index="5"></div>
+        <div class="cell" data-index="6"></div>
+        <div class="cell" data-index="7"></div>
+        <div class="cell" data-index="8"></div>
+    </div>
+    <p id="result"></p>
+    <button id="resetBTN">Reset Game</button>
+</body>
+<script>
+    class Game {
+        constructor(players, elements) {
+            this.players = players;
+            this.elements = elements;
+            this.currentPlayer = this.players.p1;
+            this.board = Array(9).fill(null);
+            this.gameOver = false;
+            this.init();
+        }
+        init() {
+            this.elements.boxContainer.addEventListener("click", (e) =>
+                this.makeMove(e));
+            this.elements.reset.addEventListener("click", () =>
+                this.resetGame());
+        }
+        makeMove(e) {
+            if (this.gameOver)
+                return;
+
+            const cell = e.target;
+            const index = cell.dataset.index;
+            if (!index || this.board[index] !== null)
+                return;
+            this.board[index] = this.currentPlayer.symbol;
+            cell.textContent = this.currentPlayer.symbol;
+            if (this.checkWinner()) {
+                this.elements.result.textContent = `Player${this.currentPlayer.symbol}Wins!`;
+                this.updateScore();
+                this.gameOver = true;
+                return;
+            }
+            if (!this.board.includes(null)) {
+                this.elements.result.textContent = "it's a Draw!";
+                this.gameOver = true;
+                return;
+            }
+            this.currentPlayer = this.currentPlayer === this.players.p1 ? this.players.p2 : this.players.p1;
+        }
+        checkWinner() {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+            return winPatterns.some(pattern => pattern.every(index => this.board[index] === this.currentPlayer.symbol));
+        }
+        updateScore() {
+            if (this.currentPlayer.symbol === 'X') {
+                this.players.p1.scoreContainer.textContent = parseInt(this.players.p1.scoreContainer.textContent) + 1;
+            } else {
+                this.players.p2.scoreContainer.textContent = parseInt(this.players.p2.scoreContainer.textContent) + 1;
+            }
+        }
+        resetGame() {
+            this.board.fill(null);
+            this.gameOver = false;
+            this.elements.boxContainer.querySelectorAll(".cell").forEach(cell => cell.textContent = "");
+            this.elements.result.textContent = "";
+            this.currentPlayer = this.players.p1;
+        }
+
+    }
+
+    let game = new Game(
+        {
+            p1: {
+                symbol: "X",
+                scoreContainer: document.getElementById("Player-x_score"),
+            },
+            p2: {
+                symbol: "O",
+                scoreContainer: document.getElementById("Player-o_score"),
+            },
+        },
+        {
+            boxContainer: document.getElementById("box-container"),
+            result: document.getElementById("result"),
+            reset: document.getElementById("resetBTN"),
+        }
+
+    );
+    game.init();
+</script>
+
+</html>
